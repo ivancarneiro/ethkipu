@@ -1,0 +1,92 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_nombre",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_mensaje",
+						"type": "string"
+					}
+				],
+				"name": "escribirVisita",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "verUltimaVisita",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/M01_Clase02/HolaMundo.sol": "HolaMundo"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/M01_Clase02/HolaMundo.sol": {
+			"keccak256": "0xf830ed937a340c75d78a2f031388a59995dc646e03d953e0173a019b741cb3d7",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://1d43945d28cbfa9c0b8033c90bac8023523eb7392ac717c8a543f2764993ecff",
+				"dweb:/ipfs/QmWN5viy498tasxCjwCWhvbCpD2ShtzqNyiy24d5AewjBc"
+			]
+		}
+	},
+	"version": 1
+}
