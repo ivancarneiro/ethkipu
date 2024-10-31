@@ -1,0 +1,36 @@
+Enunciado del Programa: "Gestión de Donaciones en un Proyecto Comunitario"
+Objetivo: Desarrollar un contrato inteligente que gestione donaciones a un proyecto comunitario, utilizando los conceptos de arrays, mappings, eventos y transferencia de ether.
+Requisitos del Contrato:
+Estructura de Datos:
+
+
+Utilizar un struct llamado Donacion que contenga:
+address donante: la dirección del donante.
+uint cantidad: la cantidad de ether donada.
+uint fecha: la fecha de la donación.
+Crear un array de Donacion para almacenar todas las donaciones realizadas al contrato.
+Utilizar un mapping para rastrear el total donado por cada dirección.
+Eventos:
+
+
+Emitir un evento DonacionRealizada que incluya:
+La dirección del donante.
+La cantidad de ether donada.
+La fecha de la donación.
+Funciones del Contrato:
+
+
+Una función donar() que permita a los usuarios enviar ether al contrato. Esta función debe:
+Aceptar ether (debe ser payable).
+Crear un nuevo registro en el array de donaciones.
+Actualizar el mapping para reflejar el total donado por el donante.
+Emitir el evento DonacionRealizada.
+Una función obtenerDonaciones() que retorne el total de donaciones realizadas y el número de donantes únicos.
+Una función retirarFondos() que permita al propietario del contrato retirar los fondos acumulados. Esta función debe:
+Validar que el llamador sea el propietario.
+Transferir el ether acumulado a la dirección del propietario utilizando address payable.
+Pruebas y Validaciones:
+
+
+Asegurarse de que la función donar() sólo se ejecute si se envía una cantidad mayor a cero.
+Verificar que el propietario pueda retirar los fondos acumulados.
