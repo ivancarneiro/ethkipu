@@ -1,0 +1,200 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "donante",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "donacion",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "fecha",
+						"type": "uint256"
+					}
+				],
+				"name": "DonacionRealizada",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "balance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "donaciones",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "donante",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "cantidad",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "fecha",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "donar",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "obtenerDonaciones",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "donante",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "cantidad",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "fecha",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Donaciones.Donacion[]",
+						"name": "_donaciones",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "retirarFondos",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "uniqueAddr",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/M02_Fundamentos_Solidity/Clase04/Donaciones.sol": "Donaciones"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/M02_Fundamentos_Solidity/Clase04/Donaciones.sol": {
+			"keccak256": "0x5faae6c9572455061b66b5bd7bf648ff816e289d5162014d93657614cb43155b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b3a7cdb8f4e266e50dac3330f557f8ae5f038bd9b924c52df5e52fb5d1c324a6",
+				"dweb:/ipfs/QmbFP96Hzxxsgkz71rnQs5ttaztswddo7em6QchUxJXeTs"
+			]
+		}
+	},
+	"version": 1
+}
