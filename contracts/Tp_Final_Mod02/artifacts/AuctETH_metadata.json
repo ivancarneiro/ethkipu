@@ -1,0 +1,223 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_initValue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_bidIncrement",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_duration",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_bidValue",
+						"type": "uint256"
+					}
+				],
+				"name": "NewBid",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "bidders",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "addrs",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastBid",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "makeBid",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "offers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "returnDeposits",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "showBidders",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "addrs",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "lastBid",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct AuctETH.Bidder[]",
+						"name": "_bidders",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "showCurrentBid",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "_currentBid",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "showWinner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "uniqueAddr",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Ivan Carneiro",
+			"details": "Implements features like bid increments, automatic extensions, and refunds with commission",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_bidIncrement": "The minimum bid increment (in percentage), if not specified, will be 2%.",
+						"_duration": "The duration of the auction (in seconds), e.g. (5min = 300sec; 10min = 600sec; 1h = 3600sec; 1d = 86400sec).",
+						"_initValue": "The initial value of the auction item."
+					}
+				}
+			},
+			"title": "AuctETH - A smart contract for Ethereum-based auctions",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"constructor": {
+					"notice": "Constructor to initialize the auction."
+				}
+			},
+			"notice": "This contract allows users to participate in a timed auction",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Tp_Final_Mod02/AuctETH.sol": "AuctETH"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Tp_Final_Mod02/AuctETH.sol": {
+			"keccak256": "0x1ef66b68010701cbeac7e7f94f4975f30385199a075da6e40fb90f2a7b986791",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://f7fe3ff908dda6313da1dc7d00f559a25d616a14ff992f9283778a04d7ad5a8f",
+				"dweb:/ipfs/QmesSHDL2FQKKPkA2sEZ1EbHLAjbCk6KP2DBhLaf7pi3n6"
+			]
+		}
+	},
+	"version": 1
+}
