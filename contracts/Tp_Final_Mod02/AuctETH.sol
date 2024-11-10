@@ -2,8 +2,6 @@
 
 pragma solidity >= 0.8.2 < 0.9.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/Strings.sol";
-
 /// @title AuctETH - A smart contract for Ethereum-based auctions
 /// @notice This contract allows users to participate in a timed auction
 /// @dev Implements features like bid increments, automatic extensions, and refunds with commission
@@ -14,7 +12,7 @@ contract AuctETH {
     address public owner; // Contract owner's address
     address public winner; // Auction winner's address
     uint256 public initValue; // Initial auction value
-    uint256 public currentBid; // Current bid value
+    uint256 public highestBid; // Current bid value
     uint256 public bidIncrement; // Minimum bid increment (percentage)
     uint256 public duration; // Auction duration (seconds)
     uint256 public finishTimestamp; // Auction end timestamp
@@ -27,7 +25,7 @@ contract AuctETH {
         require(_initValue > 0, "The initial value must be greater than zero for gas");
         owner = msg.sender;
         initValue = _initValue;
-        currentBid = _initValue;
+        highestBid = _initValue;
         bidIncrement = _bidIncrement;
         duration = _duration;
         finishTimestamp = block.timestamp + duration;
@@ -52,6 +50,8 @@ contract AuctETH {
     // Events
     event NewBid(address indexed bidder, uint256 bidValue); // Emitted when a new bid is placed
 
+    event Winner(address indexed winner, uint256 highestBid);
+
     // Modifiers
     modifier onlyOwner() {
         require(msg.sender == owner, "Only the auction owner can execute this function");
@@ -68,14 +68,14 @@ contract AuctETH {
         _;
     }
 
-    /// @notice Returns the current bid value.
-    /// @return The current bid value.
-    function showCurrentBid() external view returns (uint256) {
-        return currentBid;
+    /// @notice Returns the highest bid value.
+    /// @return uint256.
+    function showhighestBid() external view returns (uint256) {
+        return highestBid;
     }
 
     /// @notice Returns the minimum bid increment percentage.
-    /// @return The minimum bid increment percentage.
+    /// @return uint256.
     function incrementalPercentage() external view returns (uint256) {
         return bidIncrement;
     }
@@ -86,7 +86,7 @@ contract AuctETH {
         address bidder = msg.sender;
         uint256 bidValue = msg.value;
 
-        require(bidValue > (currentBid * (bidIncrement + 100) / 100), "The bid must outbid the best bid, considering the minimum increase percentage");
+        require(bidValue > (highestBid * (bidIncrement + 100) / 100), "The bid must outbid the best bid, considering the minimum increase percentage");
 
         // Extend auction duration if bid is placed near end
         if (block.timestamp >= finishTimestamp - 600) {
@@ -103,13 +103,13 @@ contract AuctETH {
         }
 
         winner = bidder;
-        currentBid = bidValue;
+        highestBid = bidValue;
 
         emit NewBid(bidder, bidValue);
     }
 
     /// @notice Returns an array of all bids.
-    /// @return An array of Bid structs.
+    /// @return array.
     function showBids() public view returns (Bid[] memory) {
         Bid[] memory bids = new Bid[](bidderAddresses.length);
 
@@ -120,29 +120,81 @@ contract AuctETH {
         return bids;
     }
 
-    /// @notice Alternative function to show offers and bids on JSON format
-    /// @notice Returns a JSON string of all bids.
-    /// @return A JSON string.
-    function getBids() public view returns (string memory) {
-        // Initializes the result string
-        string memory result = "[";
- 
-        // Iterates over bidder addresses
-        for (uint256 i = 0; i < bidderAddresses.length; i++) {
-            // Constructs the JSON object for each bid
-            result = string(abi.encodePacked(result, "{\"bidder\":\"", Strings.toHexString(bidderAddresses[i]), "\",\"amount\":\"", Strings.toString(bidders[bidderAddresses[i]].lastBid), "\"}"));
+    /// @notice Allows a bidder to partially refund their balance.
+    /// @dev Only the balance owner can call this function.
+    function withDraw() external payable {
+        // Verify that the message comes from the balance owner
+        require(msg.sender == bidders[msg.sender].addrs, "Only the balance owner can initiate the refund");
 
-            // Appends comma if not the last element
-            if (i < bidderAddresses.length - 1) {
-                result = string(abi.encodePacked(result, ","));
+        // Verify that the bidder has made more than one bid
+        require(bidders[msg.sender].balance > bidders[msg.sender].lastBid, "No refund will be allowed if you have not placed a bid after the last offer");
+
+        // Calculate the available refund amount
+        uint256 refundAmount = bidders[msg.sender].balance - bidders[msg.sender].lastBid;
+
+        // Check if there is a balance available for refund
+        require(refundAmount > 0, "No balance available for refund");
+
+        // Update the bidder's balance
+        bidders[msg.sender].balance -= refundAmount;
+
+        // Transfer the refund amount to the bidder
+        (bool success, ) = payable(msg.sender).call{value: refundAmount}("");
+
+        // Verify if the call was successful
+        require(success, "Error processing the refund");
+    }
+
+    /// @notice Returns bids and refunds deposits to non-winning bidders, transfers the winning bid to the winner.
+    /// @dev Only the auction owner can call this function.
+    function returnsBids() public payable onlyOwner {
+        // Verify that the auction has ended
+        require(block.timestamp >= finishTimestamp, "The auction must end");
+
+        // Get the number of bidder addresses
+        uint256 len = bidderAddresses.length;
+
+        // Iterate through each bidder address
+        for (uint256 i = 0; i < len; i++) {
+            // Check if the bidder is not the winner
+            if (bidders[bidderAddresses[i]].addrs != winner) {
+
+                // Calculate the deposit amount to refund (98% of the last bid)
+                uint256 depositAmount = (bidders[bidderAddresses[i]].lastBid * (100 - 2) / 100);
+
+                // Transfer the deposit amount to the bidder
+                (bool success, ) = payable(bidderAddresses[i]).call{value: depositAmount}("");
+                
+                // Verify if the call was successful
+                require(success, "Error processing the deposit refund");
+                
+                // Reset the bidder's last bid and balance to zero
+                bidders[bidderAddresses[i]].lastBid = 0;
+                bidders[bidderAddresses[i]].balance = 0;
+
+            } else {
+                // Transfer the winning bid amount to the winner
+                (bool success, ) = payable(winner).call{value: highestBid}("");
+                
+                // Verify if the call was successful
+                require(success, "Failed to transfer prize to winner");
+                
+                // Reset the winner's last bid and balance to zero
+                bidders[winner].lastBid = 0;
+                bidders[winner].balance = 0;
             }
         }
 
-        // Closes the JSON string
-        result = string(abi.encodePacked(result, "]"));
+        // Emit the Winner event with the winner's address and winning bid
+        emit Winner(winner, highestBid);
+    }
 
-        // Returns the JSON string
-        return result;
-        }
-
+    /// @notice Returns the winner's address and winning bid.
+    /// @dev This function can be called after the auction has ended.
+    /// @return winnerAddress The winner's Ethereum address.
+    /// @return winningBid The winning bid amount.
+    function getWinner() external view auctionFinished returns (address winnerAddress, uint256 winningBid) {
+        // Return the winner's address and winning bid
+        return (winner, highestBid);
+    }
 }

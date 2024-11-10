@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.28+commit.7893614a"
+		"version": "0.8.26+commit.8a97fa7a"
 	},
 	"language": "Solidity",
 	"output": {
@@ -27,22 +27,6 @@
 				"type": "constructor"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "length",
-						"type": "uint256"
-					}
-				],
-				"name": "StringsInsufficientHexLength",
-				"type": "error"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -59,6 +43,25 @@
 					}
 				],
 				"name": "NewBid",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "highestBid",
+						"type": "uint256"
+					}
+				],
+				"name": "Winner",
 				"type": "event"
 			},
 			{
@@ -124,19 +127,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "currentBid",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "duration",
 				"outputs": [
 					{
@@ -163,12 +153,30 @@
 			},
 			{
 				"inputs": [],
-				"name": "getBids",
+				"name": "getWinner",
 				"outputs": [
 					{
-						"internalType": "string",
+						"internalType": "address",
+						"name": "winnerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winningBid",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "highestBid",
+				"outputs": [
+					{
+						"internalType": "uint256",
 						"name": "",
-						"type": "string"
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -222,6 +230,13 @@
 			},
 			{
 				"inputs": [],
+				"name": "returnsBids",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "showBids",
 				"outputs": [
 					{
@@ -247,7 +262,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "showCurrentBid",
+				"name": "showhighestBid",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -270,18 +285,18 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withDraw",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
 			"author": "Ivan Carneiro",
 			"details": "Implements features like bid increments, automatic extensions, and refunds with commission",
-			"errors": {
-				"StringsInsufficientHexLength(uint256,uint256)": [
-					{
-						"details": "The `value` string doesn't fit in the specified `length`."
-					}
-				]
-			},
 			"kind": "dev",
 			"methods": {
 				"constructor": {
@@ -291,28 +306,36 @@
 						"_initValue": "The initial value of the auction item."
 					}
 				},
-				"getBids()": {
+				"getWinner()": {
+					"details": "This function can be called after the auction has ended.",
 					"returns": {
-						"_0": "A JSON string."
+						"winnerAddress": "The winner's Ethereum address.",
+						"winningBid": "The winning bid amount."
 					}
 				},
 				"incrementalPercentage()": {
 					"returns": {
-						"_0": "The minimum bid increment percentage."
+						"_0": "uint256."
 					}
 				},
 				"makeBid()": {
 					"details": "Requires bid value to exceed current bid by minimum increment."
 				},
+				"returnsBids()": {
+					"details": "Only the auction owner can call this function."
+				},
 				"showBids()": {
 					"returns": {
-						"_0": "An array of Bid structs."
+						"_0": "array."
 					}
 				},
-				"showCurrentBid()": {
+				"showhighestBid()": {
 					"returns": {
-						"_0": "The current bid value."
+						"_0": "uint256."
 					}
+				},
+				"withDraw()": {
+					"details": "Only the balance owner can call this function."
 				}
 			},
 			"title": "AuctETH - A smart contract for Ethereum-based auctions",
@@ -324,8 +347,8 @@
 				"constructor": {
 					"notice": "Constructor to initialize the auction."
 				},
-				"getBids()": {
-					"notice": "Alternative function to show offers and bids on JSON formatReturns a JSON string of all bids."
+				"getWinner()": {
+					"notice": "Returns the winner's address and winning bid."
 				},
 				"incrementalPercentage()": {
 					"notice": "Returns the minimum bid increment percentage."
@@ -333,11 +356,17 @@
 				"makeBid()": {
 					"notice": "Places a new bid."
 				},
+				"returnsBids()": {
+					"notice": "Returns bids and refunds deposits to non-winning bidders, transfers the winning bid to the winner."
+				},
 				"showBids()": {
 					"notice": "Returns an array of all bids."
 				},
-				"showCurrentBid()": {
-					"notice": "Returns the current bid value."
+				"showhighestBid()": {
+					"notice": "Returns the highest bid value."
+				},
+				"withDraw()": {
+					"notice": "Allows a bidder to partially refund their balance."
 				}
 			},
 			"notice": "This contract allows users to participate in a timed auction",
@@ -361,51 +390,11 @@
 	},
 	"sources": {
 		"contracts/Tp_Final_Mod02/AuctETH.sol": {
-			"keccak256": "0x792296fc09ea17501e3c5b97981d2115d84583a2fa6e59620fca52bbd6df552b",
+			"keccak256": "0x82cfcf184b482a2be5154ccaadacf9867897a27376aed65d1d6564815c2cd2ce",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://7162ca4323a3124e3d22597e9d0f597be9e13029eac730a7bcea5d8084dae592",
-				"dweb:/ipfs/QmbgYtSigs4aeRoc7ocnFFGy9tMyMR5ZVDnu1nUu8LGwHJ"
-			]
-		},
-		"https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/Panic.sol": {
-			"keccak256": "0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://c6a5ff4f9fd8649b7ee20800b7fa387d3465bd77cf20c2d1068cd5c98e1ed57a",
-				"dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG"
-			]
-		},
-		"https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/Strings.sol": {
-			"keccak256": "0x9e82c00fb176503860139c6bbf593b1a954ee7ff97ab2969656571382b9b58a2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://34b4eb157b44d4441315db65561ba7cf0fe909dc598c2cfd7080d203077d5b57",
-				"dweb:/ipfs/QmcNdvK3kDUAUr48urHxoeHd1TqVDya4YfZTM66i4goEJn"
-			]
-		},
-		"https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/math/Math.sol": {
-			"keccak256": "0x2c33f654cefbbe80a9b436b5792cfe8bda2e87f139f110073c99762558db252f",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://dc7ebd80046a52f28978cf46a24ff3e4c8568264ab6bb138038951c75d576167",
-				"dweb:/ipfs/QmQQjXVr4CbDR3DXd8GHEqn3JSJYTnbBHMJp9tvc29yXrc"
-			]
-		},
-		"https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/math/SafeCast.sol": {
-			"keccak256": "0x195533c86d0ef72bcc06456a4f66a9b941f38eb403739b00f21fd7c1abd1ae54",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://b1d578337048cad08c1c03041cca5978eff5428aa130c781b271ad9e5566e1f8",
-				"dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy"
-			]
-		},
-		"https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/utils/math/SignedMath.sol": {
-			"keccak256": "0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://db5fbb3dddd8b7047465b62575d96231ba8a2774d37fb4737fbf23340fabbb03",
-				"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
+				"bzz-raw://697e4603d215f87f4fee54ba8e7e47fa2a0917b62e7c238a9b876dee6a4d3959",
+				"dweb:/ipfs/QmPHKQ5jq46zk3mtARgsWJih16EJaJXSQtnUsJePfcBFGf"
 			]
 		}
 	},

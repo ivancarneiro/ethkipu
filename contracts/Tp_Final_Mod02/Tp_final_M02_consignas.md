@@ -21,7 +21,7 @@
 
 ### **Consideraciones importantes**
 - Usen modificadores donde sea adecuado.
-- Una vez finalizada la subasta el propietario del contrato ejecutará una función para devolver el depósito a los ofertantes que no ganaron y transferir el premio al ganador (El importe de la mejor oferta).  El propietario no interviene en la finalización de la subasta. La subasta tienen una duración predefinida y se puede extender en la medida en que sigan llegando nuevas ofertas.
+- Una vez finalizada la subasta el propietario del contrato ejecutará una función para devolver el depósito a los ofertantes que no ganaron y transferir el premio al ganador (El importe de la mejor oferta).  El propietario no interviene en la finalización de la subasta. La subasta tiene una duración predefinida y se puede extender en la medida en que sigan llegando nuevas ofertas.
 
 ---
 *Asegúrense de manejar adecuadamente los errores y usar eventos para comunicar cambios de estado.*
