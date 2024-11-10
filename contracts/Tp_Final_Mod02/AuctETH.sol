@@ -90,7 +90,7 @@ contract AuctETH {
         address bidder = msg.sender;
         uint256 bidValue = msg.value;
 
-        require(bidValue > (highestBid * (bidIncrement + 100) / 100), "The bid must outbid the best bid, considering the minimum increase percentage");
+        require(bidValue >= (highestBid * (bidIncrement + 100) / 100), "The bid must outbid the best bid, considering the minimum increase percentage");
 
         // Extend auction duration if bid is placed near end
         if (block.timestamp >= finishTimestamp - 600) {
@@ -167,7 +167,7 @@ contract AuctETH {
             // Check if the bidder is not the winner
             if (bidders[bidderAddresses[i]].addrs != winner) {
 
-                // Calculate the deposit amount to refund (98% of the last bid)
+                // Calculate the deposit amount to refund (lastBid - 2% for gas)
                 uint256 depositAmount = (bidders[bidderAddresses[i]].lastBid * (100 - 2) / 100);
 
                 // Transfer the deposit amount to the bidder

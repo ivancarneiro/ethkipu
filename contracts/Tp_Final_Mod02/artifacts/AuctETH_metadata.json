@@ -422,11 +422,11 @@
 	},
 	"sources": {
 		"contracts/Tp_Final_Mod02/AuctETH.sol": {
-			"keccak256": "0xf5db396d505756e4a0b1af079e6d0943255537457248aa9d0b4b6a63f0519298",
+			"keccak256": "0x4c490fbf4fa5164ae3a6e4b4c89eb336fcfd33ad812aef36c608588ca3fe62a2",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://359539797f8431eda49bacc615769ebe2770430f5c273821d487d95ab79f5595",
-				"dweb:/ipfs/QmbS3EddAvd3aAPv3D6nkJGYCkieC9s81btdvo2uspdK3P"
+				"bzz-raw://8f473902fc368ac31633982e000d6195843aae22f3f7cc17bbde4ebe6531ed74",
+				"dweb:/ipfs/QmNq1NdSMqT1cJVcpKXpBCBkUGu84acRAcaS7SHRjZfNqR"
 			]
 		}
 	},
