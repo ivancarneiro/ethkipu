@@ -30,6 +30,19 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "finishTimestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "ExtendedAuction",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "bidder",
@@ -62,6 +75,25 @@
 					}
 				],
 				"name": "Winner",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "WithdrawRefund",
 				"type": "event"
 			},
 			{
@@ -390,11 +422,11 @@
 	},
 	"sources": {
 		"contracts/Tp_Final_Mod02/AuctETH.sol": {
-			"keccak256": "0x82cfcf184b482a2be5154ccaadacf9867897a27376aed65d1d6564815c2cd2ce",
+			"keccak256": "0xf5db396d505756e4a0b1af079e6d0943255537457248aa9d0b4b6a63f0519298",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://697e4603d215f87f4fee54ba8e7e47fa2a0917b62e7c238a9b876dee6a4d3959",
-				"dweb:/ipfs/QmPHKQ5jq46zk3mtARgsWJih16EJaJXSQtnUsJePfcBFGf"
+				"bzz-raw://359539797f8431eda49bacc615769ebe2770430f5c273821d487d95ab79f5595",
+				"dweb:/ipfs/QmbS3EddAvd3aAPv3D6nkJGYCkieC9s81btdvo2uspdK3P"
 			]
 		}
 	},

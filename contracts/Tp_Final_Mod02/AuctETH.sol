@@ -50,7 +50,11 @@ contract AuctETH {
     // Events
     event NewBid(address indexed bidder, uint256 bidValue); // Emitted when a new bid is placed
 
-    event Winner(address indexed winner, uint256 highestBid);
+    event ExtendedAuction(uint256 finishTimestamp); // Issued when a new bid is registered within the last ten minutes of the auction ending
+
+    event WithdrawRefund(address indexed bidder, uint256 amount); // Issued when a bidder withdraws the excess of their bid
+
+    event Winner(address indexed winner, uint256 highestBid); // Issued when the owner pays the prize to the winner
 
     // Modifiers
     modifier onlyOwner() {
@@ -91,6 +95,8 @@ contract AuctETH {
         // Extend auction duration if bid is placed near end
         if (block.timestamp >= finishTimestamp - 600) {
             finishTimestamp += 600;
+
+            emit ExtendedAuction(finishTimestamp);
         }
 
         // Update bidder's information
@@ -143,6 +149,8 @@ contract AuctETH {
 
         // Verify if the call was successful
         require(success, "Error processing the refund");
+
+        emit WithdrawRefund(msg.sender, refundAmount);
     }
 
     /// @notice Returns bids and refunds deposits to non-winning bidders, transfers the winning bid to the winner.
