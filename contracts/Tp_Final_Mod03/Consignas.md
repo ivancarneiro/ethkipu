@@ -14,25 +14,25 @@
 
 #### Requisitos:
 
-- **Crear dos tokens ERC-20 simples:** Los contratos de los tokens deben tener obligatoriamente los nombres TokenA y TokenB. 
+- **Crear dos tokens ERC-20 simples:** Los contratos de los tokens deben tener obligatoriamente los nombres TokenA y TokenB. &#x2611;
 
 
 - **Implementar un contrato de exchange (denominado obligatoriamente **SimpleDEX**) que:**
     - Mantenga un pool de liquidez para **TokenA y TokenB**.
-    - Utilice la fórmula del producto constante **(x+dx)(y-dy) = xy** para calcular los precios de intercambio.
-    - Permita añadir y retirar liquidez.
-    - Permita intercambiar TokenA por TokenB y viceversa. 
+    - Utilice la fórmula del producto constante **(x+dx)(y-dy) = xy** para calcular los precios de intercambio. &#x2611;
+    - Permita añadir y retirar liquidez. &#x2611;
+    - Permita intercambiar TokenA por TokenB y viceversa.  &#x2611;
     
     
 - **El contrato SimpleDEX debe contar obligatoriamente y sin modificación de la interface con las siguientes funciones:**
-    - constructor(address _tokenA, address _tokenB)
-    - addLiquidity(uint256 amountA, uint256 amountB)
-    - swapAforB(uint256 amountAIn)
-    - swapBforA(uint256 amountBIn)
-    - removeLiquidity(uint256 amountA, uint256 amountB)
-    - getPrice(address _token)
+    - constructor(address _tokenA, address _tokenB) &#x2611;
+    - addLiquidity(uint256 amountA, uint256 amountB) &#x2611;
+    - swapAforB(uint256 amountAIn) &#x2611;
+    - swapBforA(uint256 amountBIn) &#x2611;
+    - removeLiquidity(uint256 amountA, uint256 amountB) &#x2611;
+    - getPrice(address _token) &#x2611;
 
-###### **Incluir los eventos que consideren convenientes.**
+###### **Incluir los eventos que consideren convenientes.** &#x2611;
 ---
 
 ##### Objetivos de Aprendizaje:
@@ -57,4 +57,9 @@
 
 ###### **TIPS PARA EL TRABAJO FINAL:**  En este **[documento](https://docs.google.com/presentation/d/1xqKsfAws8zdRLW9tcdPdOWRCiQCrH6Nin83awWervnA/edit?usp=sharing)** encontrarán algunas explicaciones y recomendaciones que les servirán para llevar a buen término el trabajo final. 
 
-También tienen a disposición el **[video](https://youtu.be/E5gcB6HO6Ik)** de la clase de explicación del trabajo final.
+También tienen a disposición el **[video](https://youtu.be/E5gcB6HO6Ik)** de la clase de explicación del trabajo final. 
+
+|checked|unchecked|crossed|
+|---|---|---|
+|&check;|_|&cross;|
+|&#x2611;|&#x2610;|&#x2612;|

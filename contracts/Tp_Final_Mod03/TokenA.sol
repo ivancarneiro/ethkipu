@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @title TokenA
  * @dev Implementation of the first token for the SimpleDEX
  * Inherits from OpenZeppelin's ERC20 implementation
+ * @author Ivan Carneiro
  */
 contract TokenA is ERC20, Ownable {
     /**
