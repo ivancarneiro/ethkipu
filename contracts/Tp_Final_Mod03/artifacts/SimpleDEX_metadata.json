@@ -118,13 +118,19 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "trader",
+						"name": "user",
 						"type": "address"
 					},
 					{
-						"indexed": true,
+						"indexed": false,
 						"internalType": "address",
 						"name": "tokenIn",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenOut",
 						"type": "address"
 					},
 					{
@@ -134,19 +140,13 @@
 						"type": "uint256"
 					},
 					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "tokenOut",
-						"type": "address"
-					},
-					{
 						"indexed": false,
 						"internalType": "uint256",
 						"name": "amountOut",
 						"type": "uint256"
 					}
 				],
-				"name": "Swapped",
+				"name": "TokenSwapped",
 				"type": "event"
 			},
 			{
@@ -168,6 +168,43 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getReserves",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "reserveA",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reserveB",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -183,26 +220,63 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "token",
-						"type": "address"
-					}
-				],
-				"name": "pool",
-				"outputs": [
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "amountB",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "removeLiquidity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
 				"name": "renounceOwnership",
 				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountAIn",
+						"type": "uint256"
+					}
+				],
+				"name": "swapAforB",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountBOut",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountBIn",
+						"type": "uint256"
+					}
+				],
+				"name": "swapBforA",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountAOut",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -247,6 +321,8 @@
 			}
 		],
 		"devdoc": {
+			"author": "Ivan Carneiro",
+			"details": "A simple decentralized exchange implementation that enables swapping between two ERC20 tokens using the constant product formula (x+dx)(y-dy)=xy for price calculation.",
 			"errors": {
 				"OwnableInvalidOwner(address)": [
 					{
@@ -259,23 +335,130 @@
 					}
 				]
 			},
+			"events": {
+				"LiquidityAdded(address,uint256,uint256)": {
+					"details": "Emitted when liquidity is added to the pool by the owner",
+					"params": {
+						"amountA": "Amount of TokenA added",
+						"amountB": "Amount of TokenB added",
+						"provider": "Address of the liquidity provider (owner)"
+					}
+				},
+				"LiquidityRemoved(address,uint256,uint256)": {
+					"details": "Emitted when liquidity is removed from the pool by the owner",
+					"params": {
+						"amountA": "Amount of TokenA removed",
+						"amountB": "Amount of TokenB removed",
+						"provider": "Address of the liquidity provider (owner)"
+					}
+				},
+				"TokenSwapped(address,address,address,uint256,uint256)": {
+					"details": "Emitted when a token swap occurs",
+					"params": {
+						"amountIn": "Amount of tokens being sold",
+						"amountOut": "Amount of tokens being bought",
+						"tokenIn": "Address of the token being sold",
+						"tokenOut": "Address of the token being bought",
+						"user": "Address of the user performing the swap"
+					}
+				}
+			},
 			"kind": "dev",
 			"methods": {
+				"addLiquidity(uint256,uint256)": {
+					"details": "Allows only the owner to add liquidity to the pool",
+					"params": {
+						"amountA": "Amount of TokenA to add",
+						"amountB": "Amount of TokenB to add"
+					}
+				},
+				"constructor": {
+					"details": "Constructor initializes the DEX with addresses of both tokens",
+					"params": {
+						"_tokenA": "Address of the first token",
+						"_tokenB": "Address of the second token"
+					}
+				},
+				"getPrice(address)": {
+					"details": "Returns the current price of the specified token in terms of the other token",
+					"params": {
+						"_token": "Address of the token to get the price for"
+					},
+					"returns": {
+						"_0": "Price of the token with 18 decimal places"
+					}
+				},
+				"getReserves()": {
+					"details": "Returns the current reserves of both tokens in the pool",
+					"returns": {
+						"reserveA": "Current balance of TokenA",
+						"reserveB": "Current balance of TokenB"
+					}
+				},
 				"owner()": {
 					"details": "Returns the address of the current owner."
 				},
+				"removeLiquidity(uint256,uint256)": {
+					"details": "Allows only the owner to remove liquidity from the pool",
+					"params": {
+						"amountA": "Amount of TokenA to remove",
+						"amountB": "Amount of TokenB to remove"
+					}
+				},
 				"renounceOwnership()": {
 					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"swapAforB(uint256)": {
+					"details": "Swaps TokenA for TokenB using the constant product formula",
+					"params": {
+						"amountAIn": "Amount of TokenA to swap"
+					},
+					"returns": {
+						"amountBOut": "Amount of TokenB received"
+					}
+				},
+				"swapBforA(uint256)": {
+					"details": "Swaps TokenB for TokenA using the constant product formula",
+					"params": {
+						"amountBIn": "Amount of TokenB to swap"
+					},
+					"returns": {
+						"amountAOut": "Amount of TokenA received"
+					}
 				},
 				"transferOwnership(address)": {
 					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
 				}
 			},
+			"title": "SimpleDEX",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"addLiquidity(uint256,uint256)": {
+					"notice": "Only the owner can call this functionTokens must be approved before calling this function"
+				},
+				"getPrice(address)": {
+					"notice": "Price is expressed as how many of the other token you get for 1 of this token"
+				},
+				"removeLiquidity(uint256,uint256)": {
+					"notice": "Only the owner can call this function"
+				},
+				"swapAforB(uint256)": {
+					"notice": "Tokens must be approved before calling this function"
+				},
+				"swapBforA(uint256)": {
+					"notice": "Tokens must be approved before calling this function"
+				},
+				"tokenA()": {
+					"notice": "The first token in the trading pair"
+				},
+				"tokenB()": {
+					"notice": "The second token in the trading pair"
+				}
+			},
+			"notice": "The contract implements security measures including reentrancy protection and access control.",
 			"version": 1
 		}
 	},
@@ -303,6 +486,14 @@
 				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
 			]
 		},
+		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0xa535a5df777d44e945dd24aa43a11e44b024140fc340ad0dfe42acf4002aade1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
+				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
+			]
+		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
 			"keccak256": "0xe06a3f08a987af6ad2e1c1e774405d4fe08f1694b67517438b467cecf0da0ef7",
 			"license": "MIT",
@@ -320,11 +511,11 @@
 			]
 		},
 		"contracts/Tp_Final_Mod03/SimpleDEX.sol": {
-			"keccak256": "0xcac2fc46adf5696e17e828c9dc4055dffab62844843e1e28aec0961c1bb63842",
-			"license": "GPL-3.0",
+			"keccak256": "0xb79f00c67e0be0b181eb8360a423a1969ef9e8c080e66a8e2db29e3d51216e60",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://ea0209adc3443aab15534c32be8b44a74bfd3e474b359c4cfd8986941bbf3163",
-				"dweb:/ipfs/QmYg92ekfiw5XcGAip21B21hnb2ut2R48AUNAiXwuZJCSu"
+				"bzz-raw://126ab62e860fe982f56b66c06a6f2f077dda3affc9bdc74b571d37719fc29f19",
+				"dweb:/ipfs/QmQtCxyf3aG1uzFERULxefaEwjZuh47t3n6pT1HDEXaVpy"
 			]
 		}
 	},

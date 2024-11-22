@@ -320,6 +320,7 @@
 			}
 		],
 		"devdoc": {
+			"details": "Implementation of the second token for the SimpleDEX Inherits from OpenZeppelin's ERC20 implementation",
 			"errors": {
 				"ERC20InsufficientAllowance(address,uint256,uint256)": [
 					{
@@ -393,6 +394,9 @@
 				"balanceOf(address)": {
 					"details": "See {IERC20-balanceOf}."
 				},
+				"constructor": {
+					"details": "Constructor that gives msg.sender all of existing tokens Mints 10 thousand tokens with 18 decimals to the contract deployer"
+				},
 				"decimals()": {
 					"details": "Returns the number of decimals used to get its user representation. For example, if `decimals` equals `2`, a balance of `505` tokens should be displayed to a user as `5.05` (`505 / 10 ** 2`). Tokens usually opt for a value of 18, imitating the relationship between Ether and Wei. This is the default value returned by this function, unless it's overridden. NOTE: This information is only used for _display_ purposes: it in no way affects any of the arithmetic of the contract, including {IERC20-balanceOf} and {IERC20-transfer}."
 				},
@@ -412,6 +416,7 @@
 					"details": "See {IERC20-transferFrom}. Skips emitting an {Approval} event indicating an allowance update. This is not required by the ERC. See {xref-ERC20-_approve-address-address-uint256-bool-}[_approve]. NOTE: Does not update the allowance if the current allowance is the maximum `uint256`. Requirements: - `from` and `to` cannot be the zero address. - `from` must have a balance of at least `value`. - the caller must have allowance for ``from``'s tokens of at least `value`."
 				}
 			},
+			"title": "TokenB",
 			"version": 1
 		},
 		"userdoc": {
@@ -477,11 +482,11 @@
 			]
 		},
 		"contracts/Tp_Final_Mod03/TokenB.sol": {
-			"keccak256": "0x74cb6d9dcc05618ed24b3b5e4c5bddef462f7161cb53b61939101830e35659c2",
-			"license": "GPL-3.0",
+			"keccak256": "0x5dcc296ee8891d9c1b8e031895c0715d1f26dce6fb8af558862644efdac734fa",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://830416dfb74302418e4ff8503a266dda818b241f27e6541fff9dfac2e13c9250",
-				"dweb:/ipfs/Qmf9taoaTqKGnBJcKQksAU6yXSq4eY8WvXep2o7kEax6Ms"
+				"bzz-raw://971cfd7bc69f38e9502b9fa7a937d32396f2eb88b9c91df03d45480877164087",
+				"dweb:/ipfs/QmWZzHcFsSb86i1Vgg8hyHGzh6B2xWqKqYMT76NjF4pjta"
 			]
 		}
 	},

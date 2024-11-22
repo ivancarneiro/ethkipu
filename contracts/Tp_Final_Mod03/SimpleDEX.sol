@@ -60,8 +60,6 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
         require(_tokenA != address(0) && _tokenB != address(0), "Invalid token addresses");
         tokenA = IERC20(_tokenA);
         tokenB = IERC20(_tokenB);
-        poolTokenA = tokenA.balanceOf(address(this));
-        poolTokenB = tokenB.balanceOf(address(this));
     }
 
     /**
@@ -87,10 +85,6 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
         // Transfer tokens to the contract
         require(tokenA.transferFrom(msg.sender, address(this), amountA), "Transfer of tokenA failed");
         require(tokenB.transferFrom(msg.sender, address(this), amountB), "Transfer of tokenB failed");
-
-        // Updates the liquidity pool of each token
-        poolTokenA += amountA;
-        poolTokenB += amountB;
         
         emit LiquidityAdded(msg.sender, amountA, amountB);
     }
