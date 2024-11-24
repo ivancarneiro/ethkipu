@@ -16,14 +16,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract SimpleDEX is Ownable, ReentrancyGuard {
     /// @notice The first token in the trading pair
     IERC20 public tokenA;
-    
+
     /// @notice The second token in the trading pair
     IERC20 public tokenB;
 
-    // Token liquidity pool
-    uint256 poolTokenA;
-    uint256 poolTokenB;
-    
     // Events
     /**
      * @dev Emitted when liquidity is added to the pool by the owner
@@ -81,12 +77,12 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
      */
     function addLiquidity(uint256 amountA, uint256 amountB) external onlyOwner nonReentrant {
         require(amountA > 0 && amountB > 0, "Amounts must be greater than 0");
-        
+
         // Transfer tokens to the contract
-        require(tokenA.transferFrom(msg.sender, address(this), amountA), "Transfer of tokenA failed");
-        require(tokenB.transferFrom(msg.sender, address(this), amountB), "Transfer of tokenB failed");
-        
-        emit LiquidityAdded(msg.sender, amountA, amountB);
+        require(tokenA.transferFrom(owner(), address(this), amountA), "Transfer of tokenA failed");
+        require(tokenB.transferFrom(owner(), address(this), amountB), "Transfer of tokenB failed");
+
+        emit LiquidityAdded(owner(), amountA, amountB);
     }
 
     /**
@@ -97,19 +93,15 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
      */
     function removeLiquidity(uint256 amountA, uint256 amountB) external onlyOwner nonReentrant {
         require(amountA > 0 && amountB > 0, "Amounts must be greater than 0");
-        
+
         (uint256 reserveA, uint256 reserveB) = getReserves();
-        require(amountA <= reserveA && amountB <= reserveB, "Insufficient liquidity");
-        
-        // Updates the liquidity pool of each token
-        poolTokenA -= amountA;
-        poolTokenB -= amountB;
+        require( amountA <= reserveA && amountB <= reserveB, "Insufficient liquidity");
 
         // Transfer tokens back to the owner
-        require(tokenA.transfer(msg.sender, amountA), "Transfer of tokenA failed");
-        require(tokenB.transfer(msg.sender, amountB), "Transfer of tokenB failed");
-        
-        emit LiquidityRemoved(msg.sender, amountA, amountB);
+        require(tokenA.transfer(owner(), amountA), "Transfer of tokenA failed");
+        require(tokenB.transfer(owner(), amountB), "Transfer of tokenB failed");
+
+        emit LiquidityRemoved(owner(), amountA, amountB);
     }
 
     /**
@@ -118,24 +110,24 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
      * @return amountBOut Amount of TokenB received
      * @notice Tokens must be approved before calling this function
      */
-    function swapAforB(uint256 amountAIn) external nonReentrant returns (uint256 amountBOut) {
+    function swapAforB(uint256 amountAIn) external returns (uint256 amountBOut) {
         require(amountAIn > 0, "Amount must be greater than 0");
-        
+
         (uint256 reserveA, uint256 reserveB) = getReserves();
         require(reserveA > 0 && reserveB > 0, "Insufficient liquidity");
-        
+
         // Calculate output amount using constant product formula
         // (x + dx)(y - dy) = xy
         // dy = (y * dx) / (x + dx)
         amountBOut = (reserveB * amountAIn) / (reserveA + amountAIn);
-        
+
         require(amountBOut > 0, "Insufficient output amount");
         require(amountBOut < reserveB, "Insufficient liquidity");
-        
-        require(tokenA.transferFrom(msg.sender, address(this), amountAIn), "Transfer of tokenA failed");
-        require(tokenB.transfer(msg.sender, amountBOut), "Transfer of tokenB failed");
-        
-        emit TokenSwapped(msg.sender, address(tokenA), address(tokenB), amountAIn, amountBOut);
+
+        require(tokenA.transferFrom(owner(), address(this), amountAIn), "Transfer of tokenA failed");
+        require(tokenB.transfer(owner(), amountBOut), "Transfer of tokenB failed");
+
+        emit TokenSwapped(owner(), address(tokenA), address(tokenB), amountAIn, amountBOut);
         return amountBOut;
     }
 
@@ -147,20 +139,20 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
      */
     function swapBforA(uint256 amountBIn) external nonReentrant returns (uint256 amountAOut) {
         require(amountBIn > 0, "Amount must be greater than 0");
-        
+
         (uint256 reserveA, uint256 reserveB) = getReserves();
         require(reserveA > 0 && reserveB > 0, "Insufficient liquidity");
-        
+
         // Calculate output amount using constant product formula
         amountAOut = (reserveA * amountBIn) / (reserveB + amountBIn);
-        
+
         require(amountAOut > 0, "Insufficient output amount");
         require(amountAOut < reserveA, "Insufficient liquidity");
-        
-        require(tokenB.transferFrom(msg.sender, address(this), amountBIn), "Transfer of tokenB failed");
-        require(tokenA.transfer(msg.sender, amountAOut), "Transfer of tokenA failed");
-        
-        emit TokenSwapped(msg.sender, address(tokenB), address(tokenA), amountBIn, amountAOut);
+
+        require(tokenB.transferFrom(owner(), address(this), amountBIn), "Transfer of tokenB failed");
+        require(tokenA.transfer(owner(), amountAOut), "Transfer of tokenA failed");
+
+        emit TokenSwapped(owner(), address(tokenB), address(tokenA), amountBIn, amountAOut);
         return amountAOut;
     }
 
@@ -172,10 +164,10 @@ contract SimpleDEX is Ownable, ReentrancyGuard {
      */
     function getPrice(address _token) external view returns (uint256) {
         require(_token == address(tokenA) || _token == address(tokenB), "Invalid token address");
-        
+
         (uint256 reserveA, uint256 reserveB) = getReserves();
         require(reserveA > 0 && reserveB > 0, "Empty reserves");
-        
+
         // Returns price normalized to 18 decimal places
         if (_token == address(tokenA)) {
             return (reserveB * 1e18) / reserveA; // Price of TokenA in terms of TokenB
