@@ -1,0 +1,83 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_graderAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"name": "exploit",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "grader",
+				"outputs": [
+					{
+						"internalType": "contract IGrader",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Tp_Final_Mod05_Hackin2024/HackingGradeMe.sol": "HackingGrade"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Tp_Final_Mod05_Hackin2024/HackingGradeMe.sol": {
+			"keccak256": "0x29d0ce343aef8118d4315532d4a0f0dd15da97ab553b29f5d3c86295cf480e53",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d41f92ac40842a4bba6606f23c40406334146faacf46e6b3e1d35c57597edab3",
+				"dweb:/ipfs/QmYeyUbpPMGBnkJ6qYneW6enDG4CTgMWukcUjFhRZqJBpf"
+			]
+		}
+	},
+	"version": 1
+}
